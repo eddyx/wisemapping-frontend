@@ -13,7 +13,7 @@
         "src"
     ],
     "scripts": {
-        "build": "webpack --config webpack.prod.js",
+        "build": "APP_CONFIG_TYPE='file:prod' PUBLIC_URL='http://localhost' && webpack --config webpack.prod.js",
         "cy:open": "npx cypress open",
         "cy:run": "npx cypress run",
         "dev": "webpack --config webpack.dev.js",
