@@ -20,6 +20,7 @@ import { Locale, LocaleCode } from '../app-i18n';
 export type JwtAuth = {
   email: string;
   password: string;
+  recaptcha: string | null;
 };
 
 export type NewUser = {

@@ -17,17 +17,20 @@ import AppConfig from '../../classes/app-config';
 import { useMutation } from 'react-query';
 import { ErrorInfo, LoginErrorInfo } from '../../classes/client';
 import { ClientContext } from '../../classes/provider/client-context';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { recaptchaContainerStyle } from './style';
 
 export type Model = {
   email: string;
   password: string;
+  recaptcha: string;
 };
 
 export type LoginErrorProps = {
   errorCode: number | undefined;
 };
 
-const defaultModel: Model = { email: '', password: '' };
+const defaultModel: Model = { email: '', password: '', recaptcha: ''};
 
 const LoginError = ({ errorCode }: LoginErrorProps) => {
   const intl = useIntl();
@@ -62,10 +65,12 @@ const LoginPage = (): React.ReactElement => {
   const intl = useIntl();
   const [model, setModel] = useState<Model>(defaultModel);
   const [loginError, setLoginError] = useState<number | undefined>(undefined);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [captcha, setCaptcha] = useState<any>();
 
   const client = useContext(ClientContext);
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();  
 
   useEffect(() => {
     document.title = intl.formatMessage({
@@ -87,13 +92,14 @@ const LoginPage = (): React.ReactElement => {
       },
       onError: (error: LoginErrorInfo) => {
         setLoginError(error.code);
+        captcha.reset();
       },
     },
   );
 
-  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    mutation.mutate(model);
+  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>): void => {    
     event.preventDefault();
+    mutation.mutate(model);
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -110,7 +116,7 @@ const LoginPage = (): React.ReactElement => {
 
       <FormContainer>
         <Typography variant="h4" component="h1">
-          <FormattedMessage id="login.title" defaultMessage="Welcome" />
+          <FormattedMessage id="login.title" defaultMessage="Welcome test" />
         </Typography>
 
         <Typography paragraph>
@@ -143,6 +149,22 @@ const LoginPage = (): React.ReactElement => {
               required
               autoComplete="current-password"
             />
+             
+             {AppConfig.isRecaptcha2Enabled() && (
+                <>
+                  {/* eslint-disable-next-line react/no-unknown-property */}
+                  <div css={recaptchaContainerStyle}>
+                    <ReCAPTCHA
+                      ref={(el) => setCaptcha(el)}
+                      sitekey={AppConfig.getRecaptcha2SiteKey()}
+                      onChange={(value: string) => {
+                        model.recaptcha = value;
+                        setModel(model);
+                      }}
+                    />
+                  </div>
+                </>
+              )}
             <SubmitButton
               value={intl.formatMessage({
                 id: 'login.signin',
