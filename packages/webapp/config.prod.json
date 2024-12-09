@@ -1,4 +1,4 @@
 {
     "type": "remote",
-    "url": "http://localhost:8080/api/restful/app/config"
+    "url": "http://10.80.75.206:8080/api/restful/app/config"
 }

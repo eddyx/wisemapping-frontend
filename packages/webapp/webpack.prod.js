@@ -8,6 +8,7 @@ let configUrl = '';
 if (process.env.PUBLIC_URL) {
   configUrl = process.env.PUBLIC_URL;
 } else if (process.env.VERCEL_BRANCH_URL) {
+  
   configUrl = `https://${process.env.VERCEL_BRANCH_URL}/`;
 }
 

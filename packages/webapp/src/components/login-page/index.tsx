@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import Header from '../layout/header';
 import Footer from '../layout/footer';
@@ -17,7 +18,6 @@ import AppConfig from '../../classes/app-config';
 import { useMutation } from 'react-query';
 import { ErrorInfo, LoginErrorInfo } from '../../classes/client';
 import { ClientContext } from '../../classes/provider/client-context';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { recaptchaContainerStyle } from './style';
 
 export type Model = {
@@ -150,7 +150,7 @@ const LoginPage = (): React.ReactElement => {
               autoComplete="current-password"
             />
              
-             {AppConfig.isRecaptcha2Enabled() && (
+            {AppConfig.isRecaptcha2Enabled() && (
                 <>
                   {/* eslint-disable-next-line react/no-unknown-property */}
                   <div css={recaptchaContainerStyle}>
@@ -164,7 +164,7 @@ const LoginPage = (): React.ReactElement => {
                     />
                   </div>
                 </>
-              )}
+            )}
             <SubmitButton
               value={intl.formatMessage({
                 id: 'login.signin',
